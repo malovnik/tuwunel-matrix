@@ -13,6 +13,7 @@ RUN cp /tuwunel-root/usr/bin/tuwunel /usr/local/bin/tuwunel 2>/dev/null || \
     chmod +x /usr/local/bin/tuwunel && \
     rm -rf /tuwunel-root
 
+COPY tuwunel.toml /etc/tuwunel.toml
 COPY nginx.conf /etc/nginx/sites-enabled/default
 COPY register/ /register/
 COPY start.sh /start.sh

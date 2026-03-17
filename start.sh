@@ -3,16 +3,12 @@ set -e
 
 mkdir -p /data
 
-echo "=== Debug info ==="
-echo "Data dir: $(ls -la /data/ 2>&1)"
-echo "Disk space: $(df -h /data 2>&1)"
-echo "Kernel: $(uname -a 2>&1)"
-echo "ulimit -n: $(ulimit -n 2>&1)"
-echo "ulimit -u: $(ulimit -u 2>&1)"
-echo "io_uring test: $(cat /proc/sys/kernel/io_uring_disabled 2>&1 || echo 'not found')"
-echo "=================="
+echo "=== Debug ==="
+echo "Volume: $(df -h /data 2>&1 | tail -1)"
+echo "Config: $(cat /etc/tuwunel.toml | grep -E 'pool|rocksdb|workers')"
+echo "============="
 
 rm -f /data/LOCK
 
-echo "Starting Tuwunel (server_name: ${TUWUNEL_SERVER_NAME})..."
-exec tuwunel
+echo "Starting Tuwunel with config file..."
+exec tuwunel --config /etc/tuwunel.toml

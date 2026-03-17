@@ -1,0 +1,23 @@
+[global]
+server_name = "msg.nikexpert.ru"
+database_path = "/data"
+port = [8008]
+address = ["0.0.0.0"]
+max_request_size = 52428800
+log = "info"
+
+allow_registration = true
+yes_i_am_very_very_sure_i_want_an_open_registration_server_prone_to_abuse = true
+
+trusted_servers = ["matrix.org"]
+
+new_user_displayname_suffix = ""
+
+db_pool_affinity = false
+db_pool_workers = 8
+db_pool_workers_limit = 16
+db_pool_max_workers = 32
+db_pool_queue_mult = 2
+
+rocksdb_parallelism_threads = 2
+rocksdb_max_open_files = 64
