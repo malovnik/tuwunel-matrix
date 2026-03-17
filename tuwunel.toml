@@ -20,4 +20,3 @@ db_pool_max_workers = 32
 db_pool_queue_mult = 2
 
 rocksdb_parallelism_threads = 2
-rocksdb_max_open_files = 64
