@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .toggle { cursor: pointer; user-select: none; }
+        .copied { animation: flash .4s ease; }
+        @keyframes flash { 0%,100% { opacity:1 } 50% { opacity:.5 } }
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-950 text-white flex items-center justify-center p-4">
+
+<div class="w-full max-w-md">
+
+    <!-- Form -->
+    <div id="form-view">
+        <div class="text-center mb-8">
+            <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+            </div>
+            <h1 class="text-xl font-semibold">Создать аккаунт</h1>
+            <p class="text-neutral-500 text-sm mt-1">Приватный мессенджер</p>
+        </div>
+
+        <div id="err" class="hidden bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl p-3 mb-4 text-sm"></div>
+
+        <form id="f" class="space-y-3">
+            <div>
+                <label class="block text-xs text-neutral-500 mb-1">Логин</label>
+                <input id="u" type="text" required autocomplete="username"
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-white/25 transition text-sm"
+                    placeholder="латиница, цифры">
+            </div>
+            <div>
+                <label class="block text-xs text-neutral-500 mb-1">Пароль</label>
+                <div class="relative">
+                    <input id="p" type="password" required autocomplete="new-password" minlength="8"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-20 text-white placeholder-neutral-600 focus:outline-none focus:border-white/25 transition text-sm"
+                        placeholder="минимум 8 символов">
+                    <span class="toggle absolute right-3 top-1/2 -translate-y-1/2 text-neutral-600 text-xs"
+                        onclick="tog('p',this)">показать</span>
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs text-neutral-500 mb-1">Ещё раз</label>
+                <input id="p2" type="password" required autocomplete="new-password"
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-neutral-600 focus:outline-none focus:border-white/25 transition text-sm"
+                    placeholder="подтверди пароль">
+            </div>
+            <button id="btn" type="submit"
+                class="w-full bg-white text-black font-medium rounded-xl px-4 py-3 text-sm hover:bg-neutral-200 transition disabled:opacity-30">
+                Создать
+            </button>
+        </form>
+    </div>
+
+    <!-- Success -->
+    <div id="ok-view" class="hidden">
+        <div class="text-center mb-6">
+            <div class="w-14 h-14 bg-emerald-500/15 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+            <h1 class="text-xl font-semibold">Готово</h1>
+            <p class="text-neutral-500 text-sm mt-1">Скачай приложение и войди</p>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-5 space-y-3">
+            <div>
+                <div class="text-[10px] text-neutral-600 uppercase tracking-widest">Сервер</div>
+                <div class="flex items-center gap-2 mt-0.5">
+                    <span id="r-srv" class="text-sm font-mono break-all"></span>
+                    <button onclick="copy(document.getElementById('r-srv').textContent, this)"
+                        class="shrink-0 text-xs text-neutral-500 hover:text-white transition">скопировать</button>
+                </div>
+            </div>
+            <div>
+                <div class="text-[10px] text-neutral-600 uppercase tracking-widest">Логин</div>
+                <div class="flex items-center gap-2 mt-0.5">
+                    <span id="r-user" class="text-sm font-mono"></span>
+                    <button onclick="copy(document.getElementById('r-user').textContent, this)"
+                        class="shrink-0 text-xs text-neutral-500 hover:text-white transition">скопировать</button>
+                </div>
+            </div>
+            <div>
+                <div class="text-[10px] text-neutral-600 uppercase tracking-widest">Пароль</div>
+                <div class="flex items-center gap-2">
+                    <span id="r-pass" class="text-sm font-mono">••••••••</span>
+                    <span class="toggle text-neutral-500 text-xs" id="r-tog" onclick="togR()">показать</span>
+                    <button onclick="copy(pw, this)"
+                        class="shrink-0 text-xs text-neutral-500 hover:text-white transition">скопировать</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 bg-white/5 border border-white/10 rounded-2xl p-5">
+            <div class="text-[10px] text-neutral-600 uppercase tracking-widest mb-3">Как подключиться</div>
+            <ol class="text-sm text-neutral-400 space-y-2">
+                <li>1. Скачай <span class="text-white font-medium">Element X</span>
+                    <div class="flex gap-2 mt-1">
+                        <a href="https://apps.apple.com/app/element-x-secure-messenger/id6448614706" target="_blank"
+                            class="text-xs bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 hover:bg-white/10 transition">App Store</a>
+                        <a href="https://play.google.com/store/apps/details?id=io.element.android.x" target="_blank"
+                            class="text-xs bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 hover:bg-white/10 transition">Google Play</a>
+                    </div>
+                </li>
+                <li class="pt-1">2. Нажми <span class="text-white">Войти</span></li>
+                <li>3. <span class="text-white">Изменить сервер</span> → вставь адрес сервера</li>
+                <li>4. Введи логин и пароль</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<script>
+const HS = location.origin;
+let pw = '';
+
+function tog(id, el) {
+    const i = document.getElementById(id);
+    i.type = i.type === 'password' ? 'text' : 'password';
+    el.textContent = i.type === 'password' ? 'показать' : 'скрыть';
+}
+
+function togR() {
+    const el = document.getElementById('r-pass');
+    const t = document.getElementById('r-tog');
+    if (el.textContent === '••••••••') { el.textContent = pw; t.textContent = 'скрыть'; }
+    else { el.textContent = '••••••••'; t.textContent = 'показать'; }
+}
+
+function copy(text, btn) {
+    navigator.clipboard.writeText(text);
+    const orig = btn.textContent;
+    btn.textContent = 'скопировано';
+    btn.classList.add('text-emerald-400');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('text-emerald-400'); }, 1500);
+}
+
+function err(m) {
+    const e = document.getElementById('err');
+    e.textContent = m; e.classList.remove('hidden');
+}
+
+document.getElementById('f').onsubmit = async (e) => {
+    e.preventDefault();
+    document.getElementById('err').classList.add('hidden');
+
+    const u = document.getElementById('u').value.trim().toLowerCase();
+    const p1 = document.getElementById('p').value;
+    const p2 = document.getElementById('p2').value;
+
+    if (!u || u.length < 2) return err('Логин минимум 2 символа');
+    if (!/^[a-z0-9._=-]+$/.test(u)) return err('Только латиница, цифры, точка, дефис');
+    if (p1.length < 8) return err('Пароль минимум 8 символов');
+    if (p1 !== p2) return err('Пароли не совпадают');
+
+    const btn = document.getElementById('btn');
+    btn.disabled = true; btn.textContent = 'Создаём...';
+
+    try {
+        const r1 = await fetch(`${HS}/_matrix/client/v3/register`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ username: u, password: p1, initial_device_display_name: 'Web' })
+        });
+        const d1 = await r1.json();
+        if (r1.ok) return done(u, p1);
+        if (r1.status !== 401 || !d1.session) throw new Error(d1.error || 'Ошибка');
+
+        const r2 = await fetch(`${HS}/_matrix/client/v3/register`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                username: u, password: p1,
+                initial_device_display_name: 'Web',
+                auth: { type: 'm.login.dummy', session: d1.session }
+            })
+        });
+        const d2 = await r2.json();
+        if (r2.ok) return done(u, p1);
+        if (d2.errcode === 'M_USER_IN_USE') throw new Error('Логин занят');
+        throw new Error(d2.error || 'Ошибка регистрации');
+    } catch (ex) {
+        err(ex.message);
+        btn.disabled = false; btn.textContent = 'Создать';
+    }
+};
+
+function done(u, p) {
+    pw = p;
+    document.getElementById('form-view').classList.add('hidden');
+    document.getElementById('ok-view').classList.remove('hidden');
+    document.getElementById('r-srv').textContent = HS;
+    document.getElementById('r-user').textContent = u;
+}
+</script>
+</body>
+</html>
