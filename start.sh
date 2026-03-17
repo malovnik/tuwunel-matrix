@@ -4,17 +4,15 @@ set -e
 mkdir -p /data
 
 echo "=== Debug info ==="
-echo "Data dir: $(ls -la /data/ 2>&1 || echo 'empty')"
-echo "Disk space: $(df -h /data 2>&1 || echo 'unknown')"
-echo "Tuwunel binary: $(which tuwunel) $(tuwunel --version 2>&1 || echo 'no --version')"
-echo "Env vars:"
-env | grep -i TUWUNEL | sort
+echo "Data dir: $(ls -la /data/ 2>&1)"
+echo "Disk space: $(df -h /data 2>&1)"
+echo "Kernel: $(uname -a 2>&1)"
+echo "ulimit -n: $(ulimit -n 2>&1)"
+echo "ulimit -u: $(ulimit -u 2>&1)"
+echo "io_uring test: $(cat /proc/sys/kernel/io_uring_disabled 2>&1 || echo 'not found')"
 echo "=================="
 
-rm -f /data/rocksdb_lock /data/LOCK
-
-echo "Starting nginx..."
-nginx
+rm -f /data/LOCK
 
 echo "Starting Tuwunel (server_name: ${TUWUNEL_SERVER_NAME})..."
 exec tuwunel
